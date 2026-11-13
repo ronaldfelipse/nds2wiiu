@@ -154,15 +154,21 @@ def generar(carpeta_meta, arte_icono, arte_caja, nombre,
     resultados = {}
 
     # Icono: si la fuente ya viene en la medida exacta es arte hecho para esto,
-    # asi que se usa tal cual. Si no, la portada llena el cuadro recortando lo
-    # que sobra, para que no queden franjas vacias en el menu.
+    # asi que se usa tal cual. Si no, la portada entra ENTERA con un margen.
+    #
+    # Se probo recortarla para que llenara el cuadro y queda mal: el arte de
+    # caratula suele incluir el estuche, y al recortarlo se corta por la mitad y
+    # parece que se desborda del icono. Los iconos originales de Nintendo
+    # tambien dejan margen.
     ancho, alto, bits, relleno = FORMATOS['iconTex.tga']
     if icono_fuente.size == (ancho, alto):
         icono = icono_fuente
     else:
         icono = _degradado(ancho, alto, claro, oscuro).convert('RGBA')
-        icono.alpha_composite(
-            _recortar_cuadrado(_quitar_bordes_muertos(icono_fuente), ancho), (0, 0))
+        arte = _quitar_bordes_muertos(icono_fuente)
+        arte.thumbnail((ancho - 12, alto - 12), Image.LANCZOS)
+        icono.alpha_composite(arte, ((ancho - arte.width) // 2,
+                                     (alto - arte.height) // 2))
     resultados['iconTex.tga'] = escribir_tga(
         os.path.join(carpeta_meta, 'iconTex.tga'), icono, bits, relleno)
 
@@ -179,11 +185,7 @@ def generar(carpeta_meta, arte_icono, arte_caja, nombre,
         resultados[archivo] = escribir_tga(
             os.path.join(carpeta_meta, archivo), imagen, bits, relleno)
 
-    # Logotipo: solo el nombre, que es para lo que lo usa el sistema.
-    ancho, alto, bits, relleno = FORMATOS['bootLogoTex.tga']
-    logo = Image.new('RGBA', (ancho, alto), (0, 0, 0, 0))
-    _texto_centrado(logo, nombre[:18], 6, 20)
-    resultados['bootLogoTex.tga'] = escribir_tga(
-        os.path.join(carpeta_meta, 'bootLogoTex.tga'), logo, bits, relleno)
-
+    # bootLogoTex.tga NO se toca: es el logotipo de Nintendo que el sistema
+    # dibuja en una esquina al arrancar, no un lugar para el nombre del juego.
+    # Escribir texto ahi, en 170x42, da un borron ilegible en pantalla.
     return resultados
