@@ -44,7 +44,7 @@ paquete de herramientas de Aroma.
 ## Instalación
 
 ```bash
-git clone https://github.com/<tu-usuario>/nds2wiiu.git
+git clone https://github.com/ronaldfelipse/nds2wiiu.git
 cd nds2wiiu
 pip install -r requirements.txt
 ```
