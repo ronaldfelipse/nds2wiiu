@@ -125,13 +125,30 @@ def cmd_asistente(args, cfg):
         return 1
 
 
+def _avisar_origenes(origenes):
+    """Dice de donde salio cada lista cuando no es el caso normal.
+
+    Una lista de hace meses puede estar bien o puede estar vieja, y quien lee
+    no tiene como adivinarlo. Se calla cuando todo viene fresco.
+    """
+    avisos = {'vieja': 'sin internet, la ultima bajada',
+              'respaldo': 'sin internet, la copia del proyecto del %s'
+                          % listado.RESPALDO_FECHA,
+              'no disponible': 'no se pudo traer',
+              'ilegible': 'vino en un formato que no se pudo leer'}
+    for nombre, origen in sorted(origenes.items()):
+        if origen in avisos:
+            print('   lista de %s: %s' % (nombre, avisos[origen]))
+
+
 def cmd_recomendar(args, cfg):
     """Dice que base conviene para una ROM y pide donde esta esa base.
 
     No toca la consola. Antes esta pregunta exigia tenerla encendida y en su
     menu principal solo para listar lo instalado, y despues elegia entre eso;
-    terminaba sugiriendo lo que habia en vez de lo que conviene. La hoja de la
-    comunidad responde la pregunta sin consola y sin red si ya esta en cache.
+    terminaba sugiriendo lo que habia en vez de lo que conviene. Las listas de
+    la comunidad responden la pregunta sin consola y sin red si ya estan en
+    cache.
     """
     cab = rom.cabecera(args.rom)
     if cab['es_dsi']:
@@ -141,27 +158,23 @@ def cmd_recomendar(args, cfg):
     print()
 
     try:
-        texto, origen = listado.traer()
-        entradas = listado.filas(texto)
+        entradas, origenes = listado.cargar()
     except listado.NoDisponible as e:
-        print('No se pudo consultar la lista de la comunidad: %s' % e)
-        texto, origen, entradas = None, None, []
-    if origen == 'respaldo':
-        print('Sin internet: se usa la copia incluida en el proyecto, del %s'
-              % listado.RESPALDO_FECHA)
-    elif origen == 'vieja':
-        print('Sin internet: se usa la ultima lista que se habia bajado')
+        print('No se pudo consultar ninguna lista: %s' % e)
+        entradas, origenes = [], {}
+    _avisar_origenes(origenes)
 
     en_lista = listado.consultar(os.path.basename(args.rom), entradas) if entradas else []
     if en_lista:
-        print('En la lista de compatibilidad de la comunidad:')
+        print('En las listas de compatibilidad de la comunidad:')
         for c in en_lista:
-            print('   %-46s %s' % (c['nombre'][:46], c['estado']))
-            if c['nota'] and c['nota'].lower() != 'no issues':
+            print('   %-40s %-11s  %s' % (c['nombre'][:40], c['estado'], c['fuente']))
+            print('      base: %s%s' % (c['base'],
+                                        '' if c['base_explicita'] else ' (asumida)'))
+            if c['nota']:
                 print('      nota: %s' % c['nota'][:66])
-        print('   fuente: %s' % listado.FUENTE)
     else:
-        print('No figura en la lista de la comunidad.')
+        print('No figura en ninguna de las listas.')
 
     anotado = compatibilidad.consultar(cab['codigo'])
     if anotado:

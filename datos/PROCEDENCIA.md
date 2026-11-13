@@ -77,3 +77,47 @@ dos lineas del nombre, el anio y la cantidad de jugadores— se leyeron de
 
 UWUVCI AIO es GPL-3 y este proyecto tambien, asi que la reutilizacion es la
 que esa licencia contempla: se mantiene la licencia y se reconoce el origen.
+
+---
+
+# Procedencia de `compatibilidad-uwuvci.json`
+
+La segunda lista de compatibilidad, en JSON, con un campo por dato.
+
+| | |
+|---|---|
+| Fuente | <https://github.com/UWUVCI-PRIME/UWUVCI-Compatibility> |
+| Archivo original | `NDSCompat.json` |
+| Mantiene | la comunidad de UWUVCI, con un bot de Discord |
+| Copia tomada el | 2026-11-13 |
+| Contenido | 323 reportes sobre 282 juegos, con base y region en campos propios |
+
+Alimenta el sitio <https://uwuvci.net/n64compat> y sus equivalentes por consola.
+
+## Por que hay DOS listas y no una
+
+Se midio el solapamiento antes de decidir:
+
+| | |
+|---|---|
+| solo en GBAtemp | 454 juegos |
+| solo en UWUVCI | 199 juegos |
+| en las dos | 79 juegos |
+| union | **732 juegos** |
+
+Quedarse con una sola —cualquiera de las dos— tiraba mas de lo que ganaba.
+
+Cuando las dos conocen el mismo juego gana UWUVCI, porque su dato es mejor:
+cada entrada dice que base se uso de verdad, mientras que en la hoja de GBAtemp
+512 de 533 la heredan de un "salvo que se indique" y son suposiciones.
+
+Ese detalle cambia los numeros que la herramienta informa: contando solo bases
+reportadas, New Super Mario Bros. (USA) aparece en 65 de 260 juegos, un 25%, y
+no en el 95% que sugeriria la regla de la hoja.
+
+## Que es y que no
+
+Son **datos de compatibilidad medidos** por quienes probaron cada combinacion.
+Se incluyen con atribucion y sin modificar, como copia de respaldo para cuando
+no hay internet. Si quienes los mantienen prefieren que no se distribuyan aca,
+basta con abrir un issue.

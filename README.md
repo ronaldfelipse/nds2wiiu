@@ -239,7 +239,7 @@ y el identificador exacto del título:
 ```
 Base recomendada: [USA] New Super Mario Bros.
    title ID 0005000010195A00   WUP-N-DADE   USA
-   porque: la que usa la comunidad en 512 de los 539 juegos de la lista
+   porque: la base mas reportada de las listas: 65 de 260 juegos
 
 Ruta de la base a usar (vacio para salir):
 ```
@@ -249,8 +249,8 @@ El orden de precedencia es este:
 | | fuente | por qué va ahí |
 |---|---|---|
 | 1 | un resultado **probado y anotado** para ese juego | es el único dato que viene de una consola real con un resultado conocido |
-| 2 | la **lista de la comunidad**, si ese juego figura | 539 juegos probados por gente, pero no en tu consola |
-| 3 | la **base por defecto** de esa lista | cubre el 95% de los casos documentados |
+| 2 | las **listas de la comunidad**, si ese juego figura | 732 juegos probados por gente, pero no en tu consola |
+| 3 | la **base más reportada** del conjunto | es una apuesta, y la salida dice que lo es |
 
 Las tres son automáticas, ninguna pide clave y **ninguna necesita la consola**:
 qué base conviene no depende de lo que tengas instalado.
@@ -264,43 +264,45 @@ Cuando le das la ruta, comprueba que sea de verdad un título de DS, **avisa si
 no es la recomendada** —sirve igual, pero conviene saberlo antes de anotar el
 resultado— y te arma el comando de inyección listo para copiar.
 
-**1. La lista de compatibilidad de la comunidad.** El hilo de GBAtemp
-[*\[NEW\] Wii U NDS Injection Compatibility List*](https://gbatemp.net/threads/new-wii-u-nds-injection-compatibility-list.605592/)
-mantiene una hoja de cálculo con **539 juegos** clasificados en *funciona*,
-*con fallas* y *no arranca*. Google la exporta como CSV, así que es
-consultable por programa: se baja, se lee y queda en caché una semana.
+**1. Dos listas de la comunidad.** Mantenidas por gente distinta, y se usan
+las dos:
 
-Si no hay internet se usa la última lista bajada, y si tampoco hay ninguna
-—un clon recién hecho, por ejemplo— se usa la **copia de respaldo** que viene
-en `datos/`. En los dos casos la salida lo dice, con la fecha, para que sepas
-que estás leyendo algo que puede estar viejo. La copia existe porque la fuente
-es una hoja de cálculo personal enlazada desde un hilo de 2022: si el enlace se
-cae, sin ella el proyecto perdería su mejor fuente. Procedencia y atribución en
+| | mantiene | formato | cubre |
+|---|---|---|---|
+| [UWUVCI](https://github.com/UWUVCI-PRIME/UWUVCI-Compatibility) | la comunidad de UWUVCI, con un bot de Discord | JSON, un campo por dato | 282 juegos |
+| [GBAtemp](https://gbatemp.net/threads/new-wii-u-nds-injection-compatibility-list.605592/) | un hilo de foro de 2022 | hoja de cálculo exportada como CSV | 533 juegos |
+
+**Se usan las dos porque apenas se solapan.** Medido: solo 79 juegos están en
+ambas, 454 solo en GBAtemp y 199 solo en UWUVCI. Quedarse con una —cualquiera—
+tiraba más de lo que ganaba. Juntas cubren **732**.
+
+Cuando las dos conocen el mismo juego gana UWUVCI, porque su dato es mejor:
+cada entrada dice qué base se usó de verdad, mientras que en la hoja de GBAtemp
+**512 de 533 la heredan** de un *«salvo que se indique, la base es New Super
+Mario Bros.»*. Son suposiciones, no reportes.
+
+Eso cambia un número que conviene no repetir sin mirar: contando solo bases
+reportadas de verdad, New Super Mario Bros. (USA) aparece en **65 de 260**
+juegos, un 25%, y no en el 95% que sugeriría la regla de la hoja. Sigue siendo
+la más común, pero no por goleada.
+
+```
+En las listas de compatibilidad de la comunidad:
+   Advance Wars: Days of Ruin               con fallas   UWUVCI
+      base: [USA] Advance Wars: Days of Ruin
+      nota: Major graphical glitches and slowdown on maps.
+```
+
+Cada coincidencia dice **de qué lista salió** y si la base es un reporte o una
+suposición. Las dos se bajan y se cachean por separado, una semana cada una; si
+una falla se sigue con la otra. Sin internet se usa la última bajada, y si
+nunca bajaste ninguna, las **copias de respaldo** que vienen en `datos/`. La
+salida lo dice siempre, con la fecha. Procedencia y atribución en
 [`datos/PROCEDENCIA.md`](datos/PROCEDENCIA.md).
 
-```
-Lista de compatibilidad de la comunidad:
-   [USA] Castlevania Portrait of Ruin (No Issues) funciona
-      base : [USA] Metroid Prime Hunters
-      NO la tenes instalada; probala con otra y anota el resultado
-   fuente: https://gbatemp.net/threads/new-wii-u-nds-injection-compatibility-list.605592/
-```
-
-Lo que esa hoja aclara en su cabecera, y conviene saber antes de empezar:
-
-> *Unless specified, Base Game (WUP) is always \[USA\] New Super Mario Bros.*
-
-**La base por defecto de la comunidad es New Super Mario Bros. (USA).** De los
-539 juegos, solo 27 piden otra — Castlevania quiere Metroid Prime Hunters,
-Dragon Ball Origins quiere Mario Kart DS, y así. Si vas a conseguir una sola
-base, que sea esa.
-
-Se puede saltear con `--sin-lista`, que evita la única conexión a internet que
-hace este comando.
-
 **2. El registro propio del proyecto.** `compatibilidad.json`, con lo que
-prueba la gente que usa esta herramienta. Cubre lo que la hoja no, y un
-resultado anotado acá con una base instalada manda sobre todo lo demás.
+prueba la gente que usa esta herramienta. Cubre lo que las listas no, y un
+resultado anotado acá manda sobre todo lo demás.
 
 ```bash
 ./nds2wiiu.py anotar CR8E DAGP funciona --nota "arranca y se juega entero"
@@ -309,10 +311,12 @@ resultado anotado acá con una base instalada manda sobre todo lo demás.
 Se versiona junto al código. **Si mandás tu resultado como pull request, le
 ahorrás la prueba al que venga después.**
 
-**3. Si no figura en ninguna de las dos**, se recomienda la base por defecto de
-la hoja: New Super Mario Bros. (USA). No es una deducción sobre tu juego, es la
-que funciona en el 95% de los casos documentados, y la salida dice exactamente
-eso para que sepas que es una apuesta y no un dato.
+**3. Si no figura en ninguna parte**, se recomienda la base más reportada del
+conjunto, que hoy es New Super Mario Bros. (USA) con 65 de 260 juegos. No es
+una deducción sobre tu juego: es la que más gente usó con éxito en otros. La
+salida dice ese número para que sepas que estás ante una apuesta y no un dato,
+y se recalcula en cada corrida —las listas se editan y el número de hoy no es
+el de dentro de un año.
 
 ### Buscar en foros (opcional)
 

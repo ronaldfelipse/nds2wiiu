@@ -49,8 +49,8 @@ def recomendar_base(codigo_juego, en_lista, datos=None):
 
     Tres niveles:
       1. lo que alguien probo y anoto para ESE juego
-      2. lo que dice la hoja de la comunidad para ESE juego
-      3. la base por defecto de la hoja, que es la que usa la enorme mayoria
+      2. lo que dicen las listas de la comunidad para ESE juego
+      3. la base mas reportada del conjunto, que es una apuesta y se dice
 
     Antes esta decision dependia de la lista de bases instaladas en la consola,
     lo que obligaba a tener la consola encendida y en su menu principal solo
@@ -66,10 +66,9 @@ def recomendar_base(codigo_juego, en_lista, datos=None):
         if c.get('estado') != 'no arranca':
             return c['base'], 'la que usa la lista de la comunidad para este juego'
 
-    total, por_defecto = listado.estadisticas()
-    return (listado.BASE_POR_DEFECTO,
-            'la que usa la comunidad en %d de los %d juegos de la lista'
-            % (por_defecto, total))
+    base, cuantos, total = listado.base_mas_usada()
+    return (base, 'la base mas reportada de las listas: %d de %d juegos'
+                  % (cuantos, total))
 
 
 def anotar(codigo_juego, codigo_base, resultado, fuente='probado', nota='', ruta=ARCHIVO):

@@ -77,21 +77,24 @@ class Cancelado(Exception):
 def _recomendacion(ruta_rom, cab):
     """Que base conviene, sin tocar la consola."""
     try:
-        texto, origen = listado.traer()
-        entradas = listado.filas(texto)
+        entradas, origenes = listado.cargar()
     except listado.NoDisponible as e:
-        print('   no se pudo consultar la lista de la comunidad: %s' % e)
-        entradas, origen = [], None
-    if origen == 'respaldo':
-        print('   sin internet: se usa la copia del proyecto, del %s'
-              % listado.RESPALDO_FECHA)
-    elif origen == 'vieja':
-        print('   sin internet: se usa la ultima lista bajada')
+        print('   no se pudo consultar ninguna lista: %s' % e)
+        entradas, origenes = [], {}
+    avisos = {'vieja': 'sin internet, la ultima bajada',
+              'respaldo': 'sin internet, la copia del proyecto del %s'
+                          % listado.RESPALDO_FECHA,
+              'no disponible': 'no se pudo traer',
+              'ilegible': 'formato ilegible'}
+    for nombre, origen in sorted(origenes.items()):
+        if origen in avisos:
+            print('   lista de %s: %s' % (nombre, avisos[origen]))
 
     en_lista = listado.consultar(os.path.basename(ruta_rom), entradas) if entradas else []
     for c in en_lista:
-        print('   la comunidad lo da como "%s" con base %s' % (c['estado'], c['base']))
-        if c['nota'] and c['nota'].lower() != 'no issues':
+        print('   %s lo da como "%s" con base %s'
+              % (c['fuente'], c['estado'], c['base']))
+        if c['nota']:
             print('      nota: %s' % c['nota'][:66])
     if not en_lista:
         print('   no figura en la lista de la comunidad')
