@@ -12,7 +12,7 @@ import shutil
 import sys
 import tempfile
 
-from nds2wiiu import claves, consola, empaquetado, inyeccion, rom
+from nds2wiiu import claves, compatibilidad, consola, empaquetado, inyeccion, rom
 
 # arte e imagenes necesitan Pillow, que solo hace falta para generar las
 # imagenes del titulo. Se importan dentro de la orden que los usa para que
@@ -48,9 +48,34 @@ def cmd_bases(args, cfg):
         print('No hay titulos de Consola Virtual de DS instalados en esa consola.')
         print('Sin una base no se puede inyectar; mira el README.')
         return 1
-    print('Bases disponibles:')
-    for tid, codigo, nombre in encontradas:
-        print('   %-10s %-12s %s' % (tid, codigo, nombre))
+
+    print('Bases disponibles, de emulador mas nuevo a mas viejo:')
+    for tid, codigo, nombre, emulador in encontradas:
+        print('   %-10s %-12s %-34s emulador %d' % (tid, codigo, nombre[:34], emulador))
+
+    if args.rom:
+        cab = rom.cabecera(args.rom)
+        print()
+        print('Para %s (%s):' % (cab['titulo_interno'], cab['codigo']))
+        anotado = compatibilidad.consultar(cab['codigo'])
+        if anotado:
+            for e in anotado:
+                print('   base %-6s %-12s %s' % (e['base'], e['resultado'],
+                                                 e.get('fuente', '')))
+        else:
+            print('   no hay nada anotado todavia para este juego')
+        elegida, motivo = compatibilidad.recomendar(cab['codigo'], encontradas)
+        if elegida:
+            print('   sugerida: %s (%s) — %s' % (elegida[0], elegida[2][:30], motivo))
+    return 0
+
+
+def cmd_anotar(args, cfg):
+    """Deja constancia de si una combinacion funciono, para la proxima vez."""
+    compatibilidad.anotar(args.juego, args.base, args.resultado, args.fuente, args.nota)
+    print('Anotado: %s con base %s -> %s' % (args.juego.upper(), args.base.upper(),
+                                             args.resultado))
+    print('Si te sirvio, mandalo como pull request: le ahorra la prueba al que venga.')
     return 0
 
 
@@ -173,7 +198,16 @@ def main():
     sub = p.add_subparsers(dest='orden', required=True)
 
     s = sub.add_parser('bases', help='lista los titulos de DS que sirven de base')
+    s.add_argument('--rom', help='ademas, sugiere cual conviene para esa ROM')
     s.set_defaults(func=cmd_bases)
+
+    s = sub.add_parser('anotar', help='registra si una combinacion funciono')
+    s.add_argument('juego', help='codigo de 4 letras del juego, por ejemplo CR8E')
+    s.add_argument('base', help='codigo de 4 letras de la base, por ejemplo DAGP')
+    s.add_argument('resultado', choices=compatibilidad.RESULTADOS)
+    s.add_argument('--fuente', default='probado')
+    s.add_argument('--nota', default='')
+    s.set_defaults(func=cmd_anotar)
 
     s = sub.add_parser('extraer', help='baja una base de la consola')
     s.add_argument('base', help='identificador del titulo, por ejemplo 101a2000')

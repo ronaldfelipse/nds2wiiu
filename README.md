@@ -94,6 +94,41 @@ Después, desde la consola, instalalo con **WUP Installer GX2** o **NUSspli**.
 ./nds2wiiu.py subir paquete/ "[WUP][NDS] Mi Juego"
 ```
 
+### Qué base usar
+
+No existe ninguna tabla pública y consultable que diga qué base conviene para
+cada juego: lo que hay son hilos de foro y wikis que casi nadie mantiene. Así
+que este proyecto arma la suya con lo que la gente prueba de verdad.
+
+```bash
+./nds2wiiu.py --consola 192.168.40.150 bases --rom juego.nds
+```
+
+```
+Bases disponibles, de emulador mas nuevo a mas viejo:
+   101abf00   WUP-N-DALP   Wario: Master of Disguise          emulador 1542592
+   101a2300   WUP-N-DAHP   Mario & Luigi: Partners in Time    emulador 1541120
+   101a2000   WUP-N-DAGP   WarioWare: Touched!                emulador 1540608
+
+Para CRASH08DS (CR8E):
+   base DAGP   funciona     probado
+   sugerida: 101a2000 (WarioWare: Touched!) — anotada como funcional
+```
+
+Un resultado probado manda sobre la heurística del emulador más nuevo. Si no hay
+nada anotado para ese juego, sugiere el emulador más reciente, que es el único
+criterio objetivo que queda.
+
+Cuando pruebes una combinación, anotala:
+
+```bash
+./nds2wiiu.py anotar CR8E DAGP funciona --nota "arranca y se juega entero"
+```
+
+Queda en `compatibilidad.json`, que se versiona junto al código. **Si mandás tu
+resultado como pull request, le ahorrás la prueba al que venga después.** Esa es
+la única forma de que esta tabla exista.
+
 ### Configuración
 
 Para no repetir lo mismo cada vez, en `~/.config/nds2wiiu/config.ini`:
@@ -122,8 +157,16 @@ Con `--sin-arte` deja las imágenes de la base.
 ## Detalles que conviene saber
 
 **No todas las bases son iguales.** Cada una trae una revisión distinta del
-emulador de DS, y algunos juegos andan mejor con unas que con otras. Si un juego
-no funciona bien, probá con otra base.
+emulador de DS, y eso se puede medir:
+
+```
+Wario: Master of Disguise         1.542.592 bytes
+Mario & Luigi: Partners in Time   1.541.120 bytes
+WarioWare: Touched!               1.540.608 bytes
+```
+
+Tres tamaños, tres programas distintos. Por eso un juego puede andar con una
+base y no con otra. `bases` las ordena de emulador más nuevo a más viejo.
 
 **El código del juego se lee de la ROM.** De ahí sale el identificador del título
 inyectado, con el mismo esquema que usan las demás herramientas: las cuatro

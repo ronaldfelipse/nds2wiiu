@@ -45,8 +45,28 @@ def _campo(texto, etiqueta):
     return html.unescape(m.group(1).strip()) if m else ''
 
 
+def _tamano_emulador(f, tid):
+    """Devuelve el tamanio del emulador de DS que lleva esa base.
+
+    Cada titulo salio con la revision del emulador que existia en su fecha, asi
+    que este numero distingue unas bases de otras: a mayor tamanio, mas nueva.
+    Es un indicio, no una garantia, pero es el unico dato objetivo disponible
+    sin instalar y probar.
+    """
+    try:
+        for es_dir, nombre, tam in _listar(f, '%s/%s/code' % (RUTA_TITULOS, tid)):
+            if not es_dir and nombre.endswith('.rpx'):
+                return tam
+    except Exception:
+        pass
+    return 0
+
+
 def bases(ip):
-    """Lista los titulos instalados que pueden servir de base, con su nombre."""
+    """Lista los titulos que pueden servir de base, de mas nueva a mas vieja.
+
+    Cada entrada es (tid, codigo, nombre, tamanio_del_emulador).
+    """
     import io
     f = _conectar(ip)
     encontrados = []
@@ -63,10 +83,12 @@ def bases(ip):
             codigo = _campo(texto, 'product_code')
             # Los titulos de DS llevan una D en la quinta posicion del codigo.
             if re.match(r'WUP-N-D', codigo):
-                encontrados.append((tid, codigo, _campo(texto, 'longname_en').replace('\n', ' ')))
+                encontrados.append((tid, codigo,
+                                    _campo(texto, 'longname_en').replace('\n', ' '),
+                                    _tamano_emulador(f, tid)))
     finally:
         f.quit()
-    return sorted(encontrados, key=lambda x: x[2])
+    return sorted(encontrados, key=lambda x: (-x[3], x[2]))
 
 
 def extraer(ip, tid, destino, aviso=None):

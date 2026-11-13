@@ -1,0 +1,10 @@
+{
+  "CR8E": [
+    {
+      "base": "DAGP",
+      "fuente": "probado",
+      "nota": "probado en consola real, arranca y se juega",
+      "resultado": "funciona"
+    }
+  ]
+}
