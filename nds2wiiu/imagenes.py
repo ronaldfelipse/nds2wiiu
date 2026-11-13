@@ -111,39 +111,75 @@ def _recortar_cuadrado(imagen, lado):
     return escalada.crop((izq, arr, izq + lado, arr + lado))
 
 
-def _pantalla(ancho, alto, arte, nombre, claro, oscuro):
-    """Compone la pantalla de arranque a partir de una caratula chica.
+CLARO_VC = (0xfb, 0xfb, 0xfc)
+OSCURO_VC = (0xd8, 0xdc, 0xe3)
+TINTA_VC = (0x44, 0x4a, 0x55)
 
-    El arte de DS que hay disponible ronda los 240 pixeles de lado, y estirarlo
-    a 1280x720 se ve borroso. Por eso el arte se queda a un tamanio modesto y el
-    resto de la pantalla lo llena una copia enorme y desenfocada de la misma
-    imagen: el color ocupa el cuadro sin que se note la falta de resolucion.
+
+def _pantalla(ancho, alto, arte, nombre, claro=None, oscuro=None):
+    """Compone la pantalla de arranque imitando la estetica de Consola Virtual.
+
+    Las pantallas originales son claras y sobrias: fondo casi blanco, el arte
+    del juego a un costado y el nombre al lado, en tinta oscura.
+
+    Se probo antes un fondo oscuro con una copia desenfocada de la caratula, y
+    al lado del original quedaba ruidoso: desenfocar un arte lleno de colores
+    produce una mancha multicolor justo donde Nintendo deja espacio en blanco.
     """
     limpio = _quitar_bordes_muertos(arte).convert('RGB')
-
-    fondo = _recortar_rectangulo(limpio, ancho, alto)
-    fondo = fondo.filter(ImageFilter.GaussianBlur(radius=max(12, alto // 18)))
-    fondo = ImageEnhance.Brightness(fondo).enhance(0.38)
-    fondo = Image.blend(fondo, _degradado(ancho, alto, claro, oscuro), 0.45)
+    fondo = _degradado(ancho, alto, CLARO_VC, OSCURO_VC)
 
     # El arte, a lo sumo al doble de su tamanio original, para no deshacerlo.
-    alto_arte = min(int(alto * 0.52), limpio.height * 2)
+    alto_arte = min(int(alto * 0.62), limpio.height * 2)
     copia = _escalar_a_alto(limpio, alto_arte)
-    x = (ancho - copia.width) // 2
-    y = int(alto * 0.16)
+    x = int(ancho * 0.10)
+    y = (alto - copia.height) // 2
 
-    sombra = Image.new('RGBA', (copia.width + 40, copia.height + 40), (0, 0, 0, 0))
-    ImageDraw.Draw(sombra).rectangle([20, 20, copia.width + 19, copia.height + 19],
-                                     fill=(0, 0, 0, 170))
-    sombra = sombra.filter(ImageFilter.GaussianBlur(radius=12))
+    marco = 3
+    sombra = Image.new('RGBA', (copia.width + 48, copia.height + 48), (0, 0, 0, 0))
+    ImageDraw.Draw(sombra).rectangle(
+        [24, 26, copia.width + 23, copia.height + 25], fill=(0, 0, 0, 90))
+    sombra = sombra.filter(ImageFilter.GaussianBlur(radius=14))
+    caja = (x - 24, y - 24, x + copia.width + 24, y + copia.height + 24)
     fondo.paste(Image.alpha_composite(
-        fondo.crop((x - 20, y - 20, x + copia.width + 20, y + copia.height + 20))
-             .convert('RGBA'), sombra).convert('RGB'), (x - 20, y - 20))
+        fondo.crop(caja).convert('RGBA'), sombra).convert('RGB'), caja[:2])
+    ImageDraw.Draw(fondo).rectangle(
+        [x - marco, y - marco, x + copia.width + marco - 1, y + copia.height + marco - 1],
+        fill=(255, 255, 255))
     fondo.paste(copia, (x, y))
 
-    _texto_centrado(fondo, nombre, y + copia.height + int(alto * 0.07),
-                    max(14, int(alto * 0.058)))
+    # El nombre a la derecha del arte, centrado en su mitad de la pantalla.
+    izquierda = x + copia.width + int(ancho * 0.06)
+    _texto_en_bloque(fondo, nombre, izquierda, ancho - int(ancho * 0.06),
+                     max(16, int(alto * 0.062)), TINTA_VC)
     return fondo
+
+
+def _texto_en_bloque(im, texto, x0, x1, alto_fuente, color):
+    """Escribe el texto centrado en la franja entre x0 y x1, partiendo lineas."""
+    d = ImageDraw.Draw(im)
+    try:
+        fuente = ImageFont.truetype(FUENTE, alto_fuente)
+    except OSError:
+        fuente = ImageFont.load_default()
+    disponible = x1 - x0
+    lineas, actual = [], ''
+    for palabra in texto.split():
+        prueba = (actual + ' ' + palabra).strip()
+        if d.textlength(prueba, font=fuente) <= disponible or not actual:
+            actual = prueba
+        else:
+            lineas.append(actual)
+            actual = palabra
+    if actual:
+        lineas.append(actual)
+
+    paso = int(alto_fuente * 1.25)
+    y = (im.height - paso * len(lineas)) // 2
+    for linea in lineas:
+        ancho_linea = d.textlength(linea, font=fuente)
+        d.text((x0 + (disponible - ancho_linea) / 2, y), linea, font=fuente, fill=color)
+        y += paso
 
 
 def generar(carpeta_meta, arte_icono, arte_caja, nombre,
