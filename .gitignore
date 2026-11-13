@@ -1,0 +1,23 @@
+# Nada de esto va al repositorio: son datos de la consola del usuario,
+# contenido de Nintendo o resultados de trabajo.
+*.bin
+*.nds
+*.srl
+*.app
+*.h3
+*.tmd
+*.tik
+*.cert
+*.wad
+*.jar
+
+bases/
+roms/
+paquetes/
+trabajo/
+salida/
+arte/
+
+__pycache__/
+*.pyc
+.venv/
