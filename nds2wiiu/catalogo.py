@@ -84,6 +84,15 @@ def buscar(nombre):
         de_region = [e for e in candidatos if e['region'] == region]
         if de_region:
             return de_region[0]
+
+    # Sin region pedida se prefiere la occidental. Devolver "la primera del
+    # archivo" entregaba la japonesa, porque es la que viene antes en el
+    # catalogo: para "New Super Mario Bros." contestaba el titulo JPN, que no
+    # es el que busca nadie que escriba el nombre en ingles.
+    for preferida in ('USA', 'EUR', 'JPN'):
+        for e in candidatos:
+            if e['region'] == preferida:
+                return e
     return candidatos[0]
 
 
