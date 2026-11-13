@@ -1,0 +1,560 @@
+[
+ {
+  "title_id": "0005000010179A00",
+  "nombre": "脳を鍛える大人のDSトレーニング (Brain Age: Train Your Brain In Minutes A Day)",
+  "codigo": "WUP-N-DAAJ",
+  "region": "JPN"
+ },
+ {
+  "title_id": "0005000010179B00",
+  "nombre": "Brain Age: Train Your Brain in Minutes a Day",
+  "codigo": "WUP-N-DAAE",
+  "region": "USA"
+ },
+ {
+  "title_id": "0005000010179C00",
+  "nombre": "Dr Kawashima's Brain Training How Old Is Your Brain?",
+  "codigo": "WUP-N-DAAP",
+  "region": "EUR"
+ },
+ {
+  "title_id": "0005000010179D00",
+  "nombre": "キャッチ！タッチ！ヨッシー！ (Yoshi Touch & Go)",
+  "codigo": "WUP-N-DABJ",
+  "region": "JPN"
+ },
+ {
+  "title_id": "0005000010179E00",
+  "nombre": "Yoshi Touch & Go",
+  "codigo": "WUP-N-DABE",
+  "region": "USA"
+ },
+ {
+  "title_id": "0005000010179F00",
+  "nombre": "Yoshi Touch & Go",
+  "codigo": "WUP-N-DABP",
+  "region": "EUR"
+ },
+ {
+  "title_id": "0005000010195600",
+  "nombre": "マリオカートDS (Mario Kart DS)",
+  "codigo": "WUP-N-DACJ",
+  "region": "JPN"
+ },
+ {
+  "title_id": "0005000010195700",
+  "nombre": "Mario Kart DS",
+  "codigo": "WUP-N-DACE",
+  "region": "USA"
+ },
+ {
+  "title_id": "0005000010195800",
+  "nombre": "MARIO KART DS",
+  "codigo": "WUP-N-DACP",
+  "region": "EUR"
+ },
+ {
+  "title_id": "0005000010195900",
+  "nombre": "New スーパーマリオブラザーズ (New Super Mario Bros.)",
+  "codigo": "WUP-N-DADJ",
+  "region": "JPN"
+ },
+ {
+  "title_id": "0005000010195A00",
+  "nombre": "New Super Mario Bros.",
+  "codigo": "WUP-N-DADE",
+  "region": "USA"
+ },
+ {
+  "title_id": "0005000010195B00",
+  "nombre": "NEW SUPER MARIO BROS.",
+  "codigo": "WUP-N-DADP",
+  "region": "EUR"
+ },
+ {
+  "title_id": "0005000010198800",
+  "nombre": "ヨッシーアイランドDS (Yoshi's Island DS)",
+  "codigo": "WUP-N-DAEJ",
+  "region": "JPN"
+ },
+ {
+  "title_id": "0005000010198900",
+  "nombre": "Yoshi’s Island DS",
+  "codigo": "WUP-N-DAEE",
+  "region": "USA"
+ },
+ {
+  "title_id": "0005000010198A00",
+  "nombre": "YOSHI’S ISLAND DS",
+  "codigo": "WUP-N-DAEP",
+  "region": "EUR"
+ },
+ {
+  "title_id": "0005000010198B00",
+  "nombre": "やわらかあたま塾 (Big Brain Academy)",
+  "codigo": "WUP-N-DAFJ",
+  "region": "JPN"
+ },
+ {
+  "title_id": "0005000010198C00",
+  "nombre": "Big Brain Academy",
+  "codigo": "WUP-N-DAFE",
+  "region": "USA"
+ },
+ {
+  "title_id": "0005000010198D00",
+  "nombre": "Big Brain Academy",
+  "codigo": "WUP-N-DAFP",
+  "region": "EUR"
+ },
+ {
+  "title_id": "00050000101A1E00",
+  "nombre": "さわるメイドインワリオ (WarioWare: Touched!)",
+  "codigo": "WUP-N-DAGJ",
+  "region": "JPN"
+ },
+ {
+  "title_id": "00050000101A1F00",
+  "nombre": "WarioWare: Touched!",
+  "codigo": "WUP-N-DAGE",
+  "region": "USA"
+ },
+ {
+  "title_id": "00050000101A2000",
+  "nombre": "WarioWare: Touched!",
+  "codigo": "WUP-N-DAGP",
+  "region": "EUR"
+ },
+ {
+  "title_id": "00050000101A2100",
+  "nombre": "マリオ&ルイージRPG2 (Mario & Luigi: Partners in Time)",
+  "codigo": "WUP-N-DAHJ",
+  "region": "JPN"
+ },
+ {
+  "title_id": "00050000101A2200",
+  "nombre": "Mario & Luigi: Partners in Time",
+  "codigo": "WUP-N-DAHE",
+  "region": "USA"
+ },
+ {
+  "title_id": "00050000101A2300",
+  "nombre": "Mario & Luigi: Partners in Time",
+  "codigo": "WUP-N-DAHP",
+  "region": "EUR"
+ },
+ {
+  "title_id": "00050000101A5200",
+  "nombre": "ドンキーコング ジャングルクライマー (Donkey Kong Jungle Climber)",
+  "codigo": "WUP-N-DAJJ",
+  "region": "JPN"
+ },
+ {
+  "title_id": "00050000101A5300",
+  "nombre": "DK Jungle Climber",
+  "codigo": "WUP-N-DAJE",
+  "region": "USA"
+ },
+ {
+  "title_id": "00050000101A5400",
+  "nombre": "Donkey Kong Jungle Climber",
+  "codigo": "WUP-N-DAJP",
+  "region": "EUR"
+ },
+ {
+  "title_id": "00050000101A5500",
+  "nombre": "星のカービィ 参上！ドロッチェ団 (Kirby Squeak Squad)",
+  "codigo": "WUP-N-DAKJ",
+  "region": "JPN"
+ },
+ {
+  "title_id": "00050000101A5600",
+  "nombre": "Kirby Squeak Squad",
+  "codigo": "WUP-N-DAKE",
+  "region": "USA"
+ },
+ {
+  "title_id": "00050000101A5700",
+  "nombre": "Kirby: Mouse Attack",
+  "codigo": "WUP-N-DAKP",
+  "region": "EUR"
+ },
+ {
+  "title_id": "00050000101ABD00",
+  "nombre": "怪盗ワリオ・ザ・セブン (Wario: Master of Disguise)",
+  "codigo": "WUP-N-DALJ",
+  "region": "JPN"
+ },
+ {
+  "title_id": "00050000101ABE00",
+  "nombre": "Wario: Master of Disguise",
+  "codigo": "WUP-N-DALE",
+  "region": "USA"
+ },
+ {
+  "title_id": "00050000101ABF00",
+  "nombre": "Wario: Master of Disguise",
+  "codigo": "WUP-N-DALP",
+  "region": "EUR"
+ },
+ {
+  "title_id": "00050000101AC000",
+  "nombre": "スターフォックス コマンド (Star Fox Command)",
+  "codigo": "WUP-N-DAMJ",
+  "region": "JPN"
+ },
+ {
+  "title_id": "00050000101AC100",
+  "nombre": "Star Fox Command",
+  "codigo": "WUP-N-DAME",
+  "region": "USA"
+ },
+ {
+  "title_id": "00050000101AC200",
+  "nombre": "Star Fox Command",
+  "codigo": "WUP-N-DAMP",
+  "region": "EUR"
+ },
+ {
+  "title_id": "00050000101B3700",
+  "nombre": "ファイアーエムブレム 新・暗黒竜と光の剣 (Fire Emblem: Shadow Dragon)",
+  "codigo": "WUP-N-DANJ",
+  "region": "JPN"
+ },
+ {
+  "title_id": "00050000101B3800",
+  "nombre": "Fire Emblem: Shadow Dragon",
+  "codigo": "WUP-N-DANE",
+  "region": "USA"
+ },
+ {
+  "title_id": "00050000101B3900",
+  "nombre": "Fire Emblem: Shadow Dragon",
+  "codigo": "WUP-N-DANP",
+  "region": "EUR"
+ },
+ {
+  "title_id": "00050000101B3A00",
+  "nombre": "メトロイドプライム ハンターズ (Metroid Prime Hunters)",
+  "codigo": "WUP-N-DAPJ",
+  "region": "JPN"
+ },
+ {
+  "title_id": "00050000101B3B00",
+  "nombre": "Metroid Prime Hunters",
+  "codigo": "WUP-N-DAPE",
+  "region": "USA"
+ },
+ {
+  "title_id": "00050000101B3C00",
+  "nombre": "Metroid Prime Hunters",
+  "codigo": "WUP-N-DAPP",
+  "region": "EUR"
+ },
+ {
+  "title_id": "00050000101B8800",
+  "nombre": "タッチ！カービィ (Kirby Canvas Curse)",
+  "codigo": "WUP-N-DAQJ",
+  "region": "JPN"
+ },
+ {
+  "title_id": "00050000101B8900",
+  "nombre": "Kirby Canvas Curse",
+  "codigo": "WUP-N-DAQE",
+  "region": "USA"
+ },
+ {
+  "title_id": "00050000101B8A00",
+  "nombre": "Kirby: Power Paintbrush",
+  "codigo": "WUP-N-DAQP",
+  "region": "EUR"
+ },
+ {
+  "title_id": "00050000101B8B00",
+  "nombre": "ゼルダの伝説 大地の汽笛 (The Legend of Zelda: Spirit Tracks)",
+  "codigo": "WUP-N-DARJ",
+  "region": "JPN"
+ },
+ {
+  "title_id": "00050000101B8C00",
+  "nombre": "The Legend of Zelda: Spirit Tracks",
+  "codigo": "WUP-N-DARE",
+  "region": "USA"
+ },
+ {
+  "title_id": "00050000101B8D00",
+  "nombre": "The Legend of Zelda: Spirit Tracks",
+  "codigo": "WUP-N-DARP",
+  "region": "EUR"
+ },
+ {
+  "title_id": "00050000101C3300",
+  "nombre": "スーパーマリオ64DS (Super Mario 64 DS)",
+  "codigo": "WUP-N-DASJ",
+  "region": "JPN"
+ },
+ {
+  "title_id": "00050000101C3400",
+  "nombre": "Super Mario 64 DS",
+  "codigo": "WUP-N-DASE",
+  "region": "USA"
+ },
+ {
+  "title_id": "00050000101C3500",
+  "nombre": "Super Mario 64 DS",
+  "codigo": "WUP-N-DASP",
+  "region": "EUR"
+ },
+ {
+  "title_id": "00050000101C3600",
+  "nombre": "ゼルダの伝説 夢幻の砂時計 (The Legend of Zelda: Phantom Hourglass)",
+  "codigo": "WUP-N-DATJ",
+  "region": "JPN"
+ },
+ {
+  "title_id": "00050000101C3700",
+  "nombre": "The Legend of Zelda: Phantom Hourglass",
+  "codigo": "WUP-N-DATE",
+  "region": "USA"
+ },
+ {
+  "title_id": "00050000101C3800",
+  "nombre": "The Legend of Zelda: Phantom Hourglass",
+  "codigo": "WUP-N-DATP",
+  "region": "EUR"
+ },
+ {
+  "title_id": "00050000101C8300",
+  "nombre": "マリオvs.ドンキーコング2 ミニミニ大行進！ (Mario vs. Donkey Kong 2: March of the Minis)",
+  "codigo": "WUP-N-DAUJ",
+  "region": "JPN"
+ },
+ {
+  "title_id": "00050000101C8400",
+  "nombre": "Mario vs. Donkey Kong 2: March of the Minis",
+  "codigo": "WUP-N-DAUE",
+  "region": "USA"
+ },
+ {
+  "title_id": "00050000101C8500",
+  "nombre": "Mario vs. Donkey Kong 2: March of the Minis",
+  "codigo": "WUP-N-DAUP",
+  "region": "EUR"
+ },
+ {
+  "title_id": "00050000101C8600",
+  "nombre": "あつめて！カービィ (Kirby Mass Attack)",
+  "codigo": "WUP-N-DAVJ",
+  "region": "JPN"
+ },
+ {
+  "title_id": "00050000101C8700",
+  "nombre": "Kirby Mass Attack",
+  "codigo": "WUP-N-DAVE",
+  "region": "USA"
+ },
+ {
+  "title_id": "00050000101C8800",
+  "nombre": "Kirby Mass Attack",
+  "codigo": "WUP-N-DAVP",
+  "region": "EUR"
+ },
+ {
+  "title_id": "00050000101CC200",
+  "nombre": "ポケモンレンジャー (Pokémon Ranger)",
+  "codigo": "WUP-N-DAWJ",
+  "region": "JPN"
+ },
+ {
+  "title_id": "00050000101CC300",
+  "nombre": "Pokémon Ranger",
+  "codigo": "WUP-N-DAWE",
+  "region": "USA"
+ },
+ {
+  "title_id": "00050000101CC400",
+  "nombre": "Pokémon Ranger",
+  "codigo": "WUP-N-DAWP",
+  "region": "EUR"
+ },
+ {
+  "title_id": "00050000101CC500",
+  "nombre": "ポケモン不思議のダンジョン 青の救助隊 (Pokémon Mystery Dungeon: Blue Rescue Team)",
+  "codigo": "WUP-N-DAXJ",
+  "region": "JPN"
+ },
+ {
+  "title_id": "00050000101CC700",
+  "nombre": "Pokémon Mystery Dungeon: Blue Rescue Team",
+  "codigo": "WUP-N-DAXE",
+  "region": "USA"
+ },
+ {
+  "title_id": "00050000101CC800",
+  "nombre": "Pokémon Mystery Dungeon: Blue Rescue Team",
+  "codigo": "WUP-N-DAXP",
+  "region": "EUR"
+ },
+ {
+  "title_id": "00050000101D1F00",
+  "nombre": "おいでよ どうぶつの森 (Animal Crossing: Wild World)",
+  "codigo": "WUP-N-DAYJ",
+  "region": "JPN"
+ },
+ {
+  "title_id": "00050000101D2000",
+  "nombre": "Animal Crossing: Wild World",
+  "codigo": "WUP-N-DAYE",
+  "region": "USA"
+ },
+ {
+  "title_id": "00050000101D2100",
+  "nombre": "Animal Crossing: Wild World",
+  "codigo": "WUP-N-DAYP",
+  "region": "EUR"
+ },
+ {
+  "title_id": "00050000101D2200",
+  "nombre": "マリオパーティDS (Mario Party DS)",
+  "codigo": "WUP-N-DAZJ",
+  "region": "JPN"
+ },
+ {
+  "title_id": "00050000101D2300",
+  "nombre": "Mario Party DS",
+  "codigo": "WUP-N-DAZE",
+  "region": "USA"
+ },
+ {
+  "title_id": "00050000101D2400",
+  "nombre": "Mario Party DS",
+  "codigo": "WUP-N-DAZP",
+  "region": "EUR"
+ },
+ {
+  "title_id": "00050000101DA100",
+  "nombre": "マリオバスケ 3on3 (Mario Hoops 3-on-3)",
+  "codigo": "WUP-N-DA2J",
+  "region": "JPN"
+ },
+ {
+  "title_id": "00050000101DA200",
+  "nombre": "Mario Hoops 3-on-3",
+  "codigo": "WUP-N-DA2E",
+  "region": "USA"
+ },
+ {
+  "title_id": "00050000101DA300",
+  "nombre": "Mario Slam Basketball",
+  "codigo": "WUP-N-DA2P",
+  "region": "EUR"
+ },
+ {
+  "title_id": "00050000101DA400",
+  "nombre": "ファミコンウォーズDS (Advance Wars: Dual Strike)",
+  "codigo": "WUP-N-DA3J",
+  "region": "JPN"
+ },
+ {
+  "title_id": "00050000101DA500",
+  "nombre": "Advance Wars: Dual Strike",
+  "codigo": "WUP-N-DA3E",
+  "region": "USA"
+ },
+ {
+  "title_id": "00050000101DA600",
+  "nombre": "Advance Wars: Dual Strike",
+  "codigo": "WUP-N-DA3P",
+  "region": "EUR"
+ },
+ {
+  "title_id": "00050000101E0C00",
+  "nombre": "ポケモン不思議のダンジョン 空の探検隊 (Pokémon Mystery Dungeon: Explorers of Sky)",
+  "codigo": "WUP-N-DA4J",
+  "region": "JPN"
+ },
+ {
+  "title_id": "00050000101E0D00",
+  "nombre": "Pokémon Mystery Dungeon: Explorers of Sky",
+  "codigo": "WUP-N-DA4E",
+  "region": "USA"
+ },
+ {
+  "title_id": "00050000101E0E00",
+  "nombre": "Pokémon Mystery Dungeon: Explorers of Sky",
+  "codigo": "WUP-N-DA4P",
+  "region": "EUR"
+ },
+ {
+  "title_id": "00050000101E0F00",
+  "nombre": "ポケモンレンジャー バトナージ (Pokémon Ranger: Shadow of Almia)",
+  "codigo": "WUP-N-DA5J",
+  "region": "JPN"
+ },
+ {
+  "title_id": "00050000101E1000",
+  "nombre": "Pokémon Ranger: Shadows of Almia",
+  "codigo": "WUP-N-DA5E",
+  "region": "USA"
+ },
+ {
+  "title_id": "00050000101E1100",
+  "nombre": "Pokémon Ranger: Shadows of Almia",
+  "codigo": "WUP-N-DA5P",
+  "region": "EUR"
+ },
+ {
+  "title_id": "00050000101E6800",
+  "nombre": "わがままファッション GIRLS MODE (Style Boutique)",
+  "codigo": "WUP-N-DA6J",
+  "region": "JPN"
+ },
+ {
+  "title_id": "00050000101E6900",
+  "nombre": "Style Savvy",
+  "codigo": "WUP-N-DA6E",
+  "region": "USA"
+ },
+ {
+  "title_id": "00050000101E6A00",
+  "nombre": "Nintendo presents: Style Boutique",
+  "codigo": "WUP-N-DA6P",
+  "region": "EUR"
+ },
+ {
+  "title_id": "00050000101E6C00",
+  "nombre": "立体ピクロス (Picross 3D)",
+  "codigo": "WUP-N-DA8J",
+  "region": "JPN"
+ },
+ {
+  "title_id": "00050000101E6D00",
+  "nombre": "Picross 3D",
+  "codigo": "WUP-N-DA8E",
+  "region": "USA"
+ },
+ {
+  "title_id": "00050000101E6E00",
+  "nombre": "Picross 3D",
+  "codigo": "WUP-N-DA8P",
+  "region": "EUR"
+ },
+ {
+  "title_id": "00050000101E6F00",
+  "nombre": "ポケモンレンジャー 光の軌跡 (Pokémon Ranger: Guardian Signs)",
+  "codigo": "WUP-N-DA9J",
+  "region": "JPN"
+ },
+ {
+  "title_id": "00050000101E7000",
+  "nombre": "Pokémon Ranger: Guardian Signs",
+  "codigo": "WUP-N-DA9E",
+  "region": "USA"
+ },
+ {
+  "title_id": "00050000101E7100",
+  "nombre": "Pokémon Ranger: Guardian Signs",
+  "codigo": "WUP-N-DA9P",
+  "region": "EUR"
+ }
+]

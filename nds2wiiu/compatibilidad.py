@@ -1,11 +1,14 @@
-# Registro de que combinaciones de juego y base funcionan.
+# Registro propio de que combinaciones de juego y base funcionan.
 #
-# No existe ninguna tabla publica y consultable que diga que base conviene para
-# cada juego: lo que hay son hilos de foro y wikis que casi nadie mantiene. Asi
-# que el proyecto arma la suya con lo que la gente prueba de verdad.
+# Este modulo nacio de una creencia equivocada: que no existia ninguna tabla
+# publica y consultable de bases para DS. Existe, la mantiene la comunidad en
+# una hoja de calculo, y la lee listado.py. Pero cubre 539 juegos de los mas de
+# mil quinientos que salieron para DS, asi que este registro sigue haciendo
+# falta para todo lo que no figura ahi.
 #
 # El archivo se versiona junto al codigo, de modo que cada resultado que alguien
-# aporta por pull request le sirve al siguiente.
+# aporta por pull request le sirve al siguiente. Lo anotado aca manda sobre la
+# heuristica del emulador mas nuevo; la hoja de la comunidad manda sobre las dos.
 import json
 import os
 
@@ -37,22 +40,36 @@ def consultar(codigo_juego, datos=None):
     return sorted(entradas, key=lambda e: RESULTADOS.index(e.get('resultado', 'sin probar')))
 
 
-def recomendar(codigo_juego, bases_disponibles, datos=None):
-    """Elige una base entre las que el usuario tiene, y explica por que.
+def recomendar_base(codigo_juego, en_lista, datos=None):
+    """Que base conviene, sin mirar que tiene instalado nadie.
 
-    Primero manda lo que ya se probo; si no hay nada anotado, se cae al unico
-    criterio objetivo que queda: el emulador mas nuevo.
+    Devuelve (base, motivo). La base es un nombre tal como lo escribe la hoja
+    ("[USA] New Super Mario Bros.") o un codigo de producto de cuatro letras si
+    sale del registro propio, que es como se anota ahi.
+
+    Tres niveles:
+      1. lo que alguien probo y anoto para ESE juego
+      2. lo que dice la hoja de la comunidad para ESE juego
+      3. la base por defecto de la hoja, que es la que usa la enorme mayoria
+
+    Antes esta decision dependia de la lista de bases instaladas en la consola,
+    lo que obligaba a tener la consola encendida y en su menu principal solo
+    para preguntar que base conviene. La pregunta no necesita la consola.
     """
-    codigos = {b[1][-4:].upper(): b for b in bases_disponibles}
+    from nds2wiiu import listado
+
     for entrada in consultar(codigo_juego, datos):
-        if entrada.get('resultado') != 'funciona':
-            continue
-        base = codigos.get(entrada.get('base', '').upper())
-        if base:
-            return base, 'anotada como funcional (%s)' % entrada.get('fuente', 'sin fuente')
-    if bases_disponibles:
-        return bases_disponibles[0], 'emulador mas nuevo de las que tenes'
-    return None, 'no hay bases disponibles'
+        if entrada.get('resultado') == 'funciona':
+            return entrada['base'], 'probada y anotada para este juego'
+
+    for c in en_lista:
+        if c.get('estado') != 'no arranca':
+            return c['base'], 'la que usa la lista de la comunidad para este juego'
+
+    total, por_defecto = listado.estadisticas()
+    return (listado.BASE_POR_DEFECTO,
+            'la que usa la comunidad en %d de los %d juegos de la lista'
+            % (por_defecto, total))
 
 
 def anotar(codigo_juego, codigo_base, resultado, fuente='probado', nota='', ruta=ARCHIVO):

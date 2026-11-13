@@ -1,9 +1,25 @@
 {
+  "A2WE": [
+    {
+      "base": "DADE",
+      "fuente": "probado",
+      "nota": "base New Super Mario Bros. USA; no figura en la lista de la comunidad",
+      "resultado": "funciona"
+    }
+  ],
   "CR8E": [
     {
       "base": "DAGP",
       "fuente": "probado",
       "nota": "probado en consola real, arranca y se juega",
+      "resultado": "funciona"
+    }
+  ],
+  "YQNE": [
+    {
+      "base": "DADE",
+      "fuente": "probado",
+      "nota": "base New Super Mario Bros. USA; no figura en la lista de la comunidad",
       "resultado": "funciona"
     }
   ]

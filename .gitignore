@@ -21,3 +21,7 @@ arte/
 __pycache__/
 *.pyc
 .venv/
+
+# Carpetas de trabajo que dejan las pruebas.
+output/
+tmp/

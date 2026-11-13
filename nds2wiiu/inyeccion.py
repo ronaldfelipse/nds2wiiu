@@ -57,6 +57,24 @@ def _reemplazar_en_xml(ruta, cambios):
         f.write(texto)
 
 
+def _nombres(nombre):
+    """Devuelve el nombre para el menu grande y para el menu HOME.
+
+    Los dos reciben el nombre entero. La herramienta de Windows corta por la
+    primera coma, porque recibe los nombres como los escribe No-Intro, con el
+    articulo desplazado al final: "Zelda, The Legend of - Spirit Tracks". Ahi
+    la coma marca ese desplazamiento y cortar tiene sentido.
+
+    Aca no: rom.nombre_legible ya devolvio el articulo a su lugar, asi que
+    toda coma que sobreviva es parte del titulo de verdad. Cortando por ella,
+    "The Chronicles of Narnia - The Lion, the Witch and the Wardrobe" quedaba
+    como "The Chronicles of Narnia - The Lion", partido a la mitad de la
+    frase. Si el nombre no entra en el menu HOME, lo acorta la consola, que
+    sabe cuanto espacio tiene.
+    """
+    return nombre, nombre
+
+
 def inyectar(base, rom, salida, nombre, codigo):
     """Arma en 'salida' una copia de 'base' con 'rom' adentro y la identidad nueva."""
     if os.path.exists(salida):
@@ -88,8 +106,14 @@ def inyectar(base, rom, salida, nombre, codigo):
     cambios = {'title_id': CATEGORIA + ident,
                'group_id': grupo,
                'product_code': 'WUP-N-' + codigo.upper()}
+    # Hay DOS nombres, y hay que cambiar los dos. El largo es el que se ve
+    # bajo el icono del menu; el corto, el que muestra el menu HOME con el
+    # juego andando. Reescribir solo el largo dejaba el titulo inyectado
+    # diciendo el nombre de la base en cuanto se apretaba HOME.
+    largo, corto = _nombres(nombre)
     for i in IDIOMAS:
-        cambios['longname_' + i] = nombre
+        cambios['longname_' + i] = largo
+        cambios['shortname_' + i] = corto
     _reemplazar_en_xml(os.path.join(salida, 'meta', 'meta.xml'), cambios)
 
     return {'identificador': CATEGORIA + ident, 'grupo': grupo,

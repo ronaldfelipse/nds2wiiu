@@ -183,7 +183,8 @@ def _texto_en_bloque(im, texto, x0, x1, alto_fuente, color):
 
 
 def generar(carpeta_meta, arte_icono, arte_caja, nombre,
-            claro=(0x3a, 0x3f, 0x4c), oscuro=(0x10, 0x12, 0x18)):
+            claro=(0x3a, 0x3f, 0x4c), oscuro=(0x10, 0x12, 0x18),
+            anio=0, jugadores=0, idioma=None, marco_icono=False):
     """Escribe las cuatro imagenes del titulo en 'carpeta_meta'."""
     icono_fuente = Image.open(arte_icono).convert('RGBA')
     caja_fuente = Image.open(arte_caja).convert('RGBA')
@@ -197,8 +198,12 @@ def generar(carpeta_meta, arte_icono, arte_caja, nombre,
     # parece que se desborda del icono. Los iconos originales de Nintendo
     # tambien dejan margen.
     ancho, alto, bits, relleno = FORMATOS['iconTex.tga']
+    conplantilla = None if icono_fuente.size == (ancho, alto) else \
+        icono_con_plantilla(icono_fuente, marco_icono)
     if icono_fuente.size == (ancho, alto):
         icono = icono_fuente
+    elif conplantilla is not None:
+        icono = conplantilla
     else:
         icono = _degradado(ancho, alto, claro, oscuro).convert('RGBA')
         arte = _quitar_bordes_muertos(icono_fuente)
@@ -217,7 +222,13 @@ def generar(carpeta_meta, arte_icono, arte_caja, nombre,
             imagen = completa if completa.size == (ancho, alto) else \
                 _recortar_rectangulo(completa.convert('RGB'), ancho, alto)
         else:
-            imagen = _pantalla(ancho, alto, caja_fuente, nombre, claro, oscuro)
+            armada = pantalla_con_plantilla(caja_fuente, nombre, anio, jugadores,
+                                            idioma)
+            if armada is None:
+                imagen = _pantalla(ancho, alto, caja_fuente, nombre, claro, oscuro)
+            else:
+                imagen = armada if armada.size == (ancho, alto) else \
+                    armada.resize((ancho, alto), Image.LANCZOS)
         resultados[archivo] = escribir_tga(
             os.path.join(carpeta_meta, archivo), imagen, bits, relleno)
 
@@ -225,3 +236,175 @@ def generar(carpeta_meta, arte_icono, arte_caja, nombre,
     # dibuja en una esquina al arrancar, no un lugar para el nombre del juego.
     # Escribir texto ahi, en 170x42, da un borron ilegible en pantalla.
     return resultados
+
+
+# Composicion sobre una plantilla, que es como lo hace la herramienta de
+# Windows y por que sus titulos se ven iguales a los originales: el marco con
+# la estetica de Consola Virtual esta dibujado a mano, y el programa solo le
+# pinta encima la caratula, el nombre, el anio y la cantidad de jugadores.
+#
+# Las medidas salieron de leer BootImage.cs de UWUVCI AIO, que es GPL-3 igual
+# que este proyecto. Las plantillas vienen de ahi, con atribucion en
+# datos/PROCEDENCIA.md.
+PLANTILLAS = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                          'datos', 'plantillas')
+
+# (x, y, ancho, alto) sobre un lienzo de 1280x720.
+HUECO_ARTE = (131, 249, 400, 300)
+LINEA_1_SOLA = (578, 340)
+LINEA_1_DE_2 = (578, 313)
+LINEA_2 = (578, 368)
+ANIO = (586, 450)
+JUGADORES = (586, 496)
+ALTO_NOMBRE = 34
+ALTO_DATO = 28
+
+# El marco del icono tapa una banda arriba —el logotipo de la consola— y otra
+# abajo. Medido sobre el canal alfa de la plantilla: lo unico libre va de la
+# fila 23 a la 117. Llenando los 128x128 enteros, el logotipo le comia la
+# cabeza a la caratula y los costados se iban de cuadro.
+VENTANA_ICONO = (0, 23, 128, 94)
+
+ETIQUETAS = {
+    'es': ('Lanzamiento: %s', 'Jugadores: %s'),
+    'en': ('Released: %s', 'Players: %s'),
+    'pt': ('Lancamento: %s', 'Jogadores: %s'),
+    'fr': ('Sortie: %s', 'Joueurs: %s'),
+    'it': ('Uscita: %s', 'Giocatori: %s'),
+    'de': ('Erschienen: %s', 'Spieler: %s'),
+}
+
+
+def _etiquetas(idioma=None):
+    """Los rotulos del anio y los jugadores, en el idioma que corresponda.
+
+    Sin idioma explicito se mira el del sistema, que es el que mas chances
+    tiene de coincidir con el de la consola. Si no esta traducido, ingles.
+    """
+    if not idioma:
+        import os as _os
+        for var in ('LC_ALL', 'LC_MESSAGES', 'LANG'):
+            if _os.environ.get(var):
+                idioma = _os.environ[var][:2].lower()
+                break
+    return ETIQUETAS.get((idioma or 'en').lower(), ETIQUETAS['en'])
+
+
+def _plantilla(nombre):
+    ruta = os.path.join(PLANTILLAS, nombre)
+    return Image.open(ruta).convert('RGBA') if os.path.isfile(ruta) else None
+
+
+def _texto_con_borde(dibujo, posicion, texto, fuente, borde=3):
+    """Texto claro con contorno oscuro, para que se lea sobre cualquier fondo."""
+    x, y = posicion
+    for dx in range(-borde, borde + 1):
+        for dy in range(-borde, borde + 1):
+            if dx * dx + dy * dy <= borde * borde:
+                dibujo.text((x + dx, y + dy), texto, font=fuente, fill=(40, 40, 40))
+    dibujo.text((x, y), texto, font=fuente, fill=(255, 255, 255))
+
+
+def _fuente(alto):
+    try:
+        return ImageFont.truetype(FUENTE, alto)
+    except OSError:
+        return ImageFont.load_default()
+
+
+def _partir_nombre(dibujo, nombre, fuente, ancho_max=640):
+    """Parte el nombre en como mucho dos lineas, que es lo que admite el marco."""
+    palabras = nombre.replace('\n', ' ').split()
+    lineas, actual = [], ''
+    for palabra in palabras:
+        prueba = (actual + ' ' + palabra).strip()
+        if dibujo.textlength(prueba, font=fuente) <= ancho_max or not actual:
+            actual = prueba
+        else:
+            lineas.append(actual)
+            actual = palabra
+            if len(lineas) == 1:
+                break
+    if actual:
+        lineas.append(actual)
+    return lineas[:2]
+
+
+def pantalla_con_plantilla(arte, nombre, anio=0, jugadores=0, idioma=None):
+    """Arma la pantalla de arranque de 1280x720 sobre la plantilla de DS.
+
+    Devuelve None si la plantilla no esta, para que el llamador se quede con
+    la composicion propia.
+    """
+    marco = _plantilla('nds-pantalla.png')
+    if marco is None:
+        return None
+
+    limpio = _quitar_bordes_muertos(arte).convert('RGB')
+    x, y, ancho, alto = HUECO_ARTE
+
+    # Entera y centrada, no recortada a la medida del hueco: la proporcion de
+    # una caratula de DS no es la del hueco, y llenandolo se le comian los
+    # bordes. Lo que sobra se rellena con el color promedio de la propia
+    # caratula, que al lado del original no canta.
+    lienzo = Image.new('RGBA', (1280, 720), (0, 0, 0, 255))
+    copia = limpio.copy()
+    copia.thumbnail((ancho, alto), Image.LANCZOS)
+    lienzo.paste(Image.new('RGB', (ancho, alto), _color_promedio(limpio)), (x, y))
+    lienzo.paste(copia, (x + (ancho - copia.width) // 2,
+                         y + (alto - copia.height) // 2))
+    lienzo = Image.alpha_composite(lienzo, marco)
+
+    dibujo = ImageDraw.Draw(lienzo)
+    fuente = _fuente(ALTO_NOMBRE)
+    lineas = _partir_nombre(dibujo, nombre, fuente)
+    if len(lineas) > 1:
+        _texto_con_borde(dibujo, LINEA_1_DE_2, lineas[0], fuente)
+        _texto_con_borde(dibujo, LINEA_2, lineas[1], fuente)
+    elif lineas:
+        _texto_con_borde(dibujo, LINEA_1_SOLA, lineas[0], fuente)
+
+    chica = _fuente(ALTO_DATO)
+    rotulo_anio, rotulo_jug = _etiquetas(idioma)
+    if anio:
+        _texto_con_borde(dibujo, ANIO, rotulo_anio % anio, chica, borde=2)
+    if jugadores:
+        cuantos = '1' if jugadores == 1 else '1-%d' % min(jugadores, 4)
+        _texto_con_borde(dibujo, JUGADORES, rotulo_jug % cuantos, chica, borde=2)
+    return lienzo.convert('RGB')
+
+
+def _color_promedio(imagen):
+    """Un color sacado de la propia imagen, para rellenar sin inventar nada."""
+    return imagen.convert('RGB').resize((1, 1), Image.LANCZOS).getpixel((0, 0))
+
+
+def icono_con_plantilla(arte, marco=False):
+    """Icono de 128x128 con la caratula entera, con o sin el marco de DS.
+
+    Sin marco por defecto: la plantilla trae el logotipo de la consola arriba,
+    y las caratulas de DS ya lo traen impreso en su franja lateral. Puestos los
+    dos quedaba repetido, y el de arriba ademas le tapaba la cabeza a la
+    ilustracion.
+
+    Con marco=True se superpone igual, para arte propio que no lo traiga. En
+    ese caso la caratula entra en la franja que el marco deja libre, no en el
+    cuadro entero, asi el logotipo no tapa nada.
+
+    Lo que sobra alrededor se rellena con el color promedio de la caratula.
+    """
+    limpio = _quitar_bordes_muertos(arte).convert('RGB')
+    plantilla = _plantilla('nds-icono.png') if marco else None
+
+    if plantilla is None:
+        hueco = (0, 0, 128, 128)
+    else:
+        hueco = VENTANA_ICONO
+
+    x, y, ancho, alto = hueco
+    copia = limpio.copy()
+    copia.thumbnail((ancho, alto), Image.LANCZOS)
+    lienzo = Image.new('RGBA', (128, 128), _color_promedio(limpio) + (255,))
+    lienzo.paste(copia, (x + (ancho - copia.width) // 2,
+                         y + (alto - copia.height) // 2))
+    return lienzo if plantilla is None else Image.alpha_composite(lienzo, plantilla)

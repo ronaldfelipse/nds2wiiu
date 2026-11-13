@@ -7,10 +7,11 @@
 # El FTP solo esta disponible mientras la consola esta en su menu principal. Al
 # abrir un juego el complemento se descarga de memoria y el puerto se cierra;
 # eso es normal y no significa que la consola se haya colgado.
-import html
 import os
 import re
 from ftplib import FTP
+
+from nds2wiiu.local import campo_meta, nombre_de_carpeta
 
 PUERTO = 21
 # Categoria de los titulos de Consola Virtual de DS instalados.
@@ -37,12 +38,6 @@ def _listar(f, ruta):
         if len(p) >= 9:
             salida.append((r[0] == 'd', p[8], int(p[4])))
     return salida
-
-
-def _campo(texto, etiqueta):
-    m = re.search(r'<%s[^>]*>(.*?)</%s>' % (etiqueta, etiqueta), texto, re.S)
-    # Los meta.xml traen entidades XML en los nombres: "Mario &amp; Luigi".
-    return html.unescape(m.group(1).strip()) if m else ''
 
 
 def _tamano_emulador(f, tid):
@@ -80,11 +75,11 @@ def bases(ip):
             except Exception:
                 continue
             texto = buf.getvalue().decode('utf-8', 'replace')
-            codigo = _campo(texto, 'product_code')
+            codigo = campo_meta(texto, 'product_code')
             # Los titulos de DS llevan una D en la quinta posicion del codigo.
             if re.match(r'WUP-N-D', codigo):
                 encontrados.append((tid, codigo,
-                                    _campo(texto, 'longname_en').replace('\n', ' '),
+                                    campo_meta(texto, 'longname_en').replace('\n', ' '),
                                     _tamano_emulador(f, tid)))
     finally:
         f.quit()
@@ -129,6 +124,10 @@ def subir(ip, carpeta, nombre_remoto, aviso=None):
                       if os.path.isfile(os.path.join(carpeta, n)))
     if not archivos:
         raise ValueError('no hay archivos en %s' % carpeta)
+
+    # La tarjeta de la consola tambien es FAT32: mismo saneo que en la copia
+    # local, o el nombre con dos puntos hace fallar la subida al final de todo.
+    nombre_remoto = nombre_de_carpeta(nombre_remoto)
 
     f = _conectar(ip)
     try:
