@@ -12,7 +12,7 @@ import shutil
 import sys
 import tempfile
 
-from nds2wiiu import claves, compatibilidad, consola, empaquetado, inyeccion, rom
+from nds2wiiu import claves, compatibilidad, consola, empaquetado, ia, inyeccion, rom
 
 # arte e imagenes necesitan Pillow, que solo hace falta para generar las
 # imagenes del titulo. Se importan dentro de la orden que los usa para que
@@ -67,7 +67,35 @@ def cmd_bases(args, cfg):
         elegida, motivo = compatibilidad.recomendar(cab['codigo'], encontradas)
         if elegida:
             print('   sugerida: %s (%s) — %s' % (elegida[0], elegida[2][:30], motivo))
+
+        if args.consultar_ia and not anotado:
+            consultar_ia(cab, encontradas, cfg)
     return 0
+
+
+def consultar_ia(cab, bases_disponibles, cfg):
+    """Pregunta a un modelo con acceso a internet, y guarda lo que conteste.
+
+    Lo que diga entra al registro como 'sin probar': es una pista para empezar,
+    no un hecho. Solo pasa a 'funciona' cuando alguien lo prueba de verdad.
+    """
+    clave = os.environ.get('OPENROUTER_API_KEY') or cfg.get('openrouter')
+    modelo = cfg.get('modelo_ia', ia.MODELO)
+    print()
+    print('Consultando a %s...' % modelo)
+    try:
+        r = ia.consultar(cab['codigo'], cab['titulo_interno'], bases_disponibles,
+                         clave, modelo)
+    except ia.SinRespuesta as e:
+        print('   sin respuesta util: %s' % e)
+        print('   (que diga que no sabe es un resultado valido, no una falla)')
+        return
+    print('   propone: base %s   confianza %s' % (r['base'], r['confianza']))
+    print('   motivo : %s' % r['motivo'])
+    print('   fuente : %s' % r['fuente'])
+    compatibilidad.anotar(cab['codigo'], r['base'], 'sin probar',
+                          fuente='ia: ' + r['fuente'], nota=r['motivo'])
+    print('   anotado como "sin probar". Confirmalo con "anotar" cuando lo pruebes.')
 
 
 def cmd_anotar(args, cfg):
@@ -199,6 +227,8 @@ def main():
 
     s = sub.add_parser('bases', help='lista los titulos de DS que sirven de base')
     s.add_argument('--rom', help='ademas, sugiere cual conviene para esa ROM')
+    s.add_argument('--consultar-ia', action='store_true',
+                   help='si no hay nada anotado, preguntar a un modelo con acceso a internet')
     s.set_defaults(func=cmd_bases)
 
     s = sub.add_parser('anotar', help='registra si una combinacion funciono')

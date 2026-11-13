@@ -129,6 +129,37 @@ Queda en `compatibilidad.json`, que se versiona junto al código. **Si mandás t
 resultado como pull request, le ahorrás la prueba al que venga después.** Esa es
 la única forma de que esta tabla exista.
 
+### Preguntarle a una IA (opcional)
+
+Cuando no hay nada anotado para un juego, se le puede preguntar a un modelo con
+acceso a internet:
+
+```bash
+export OPENROUTER_API_KEY=...
+./nds2wiiu.py bases --rom juego.nds --consultar-ia
+```
+
+Está **apagado por defecto** y necesita tu propia clave de
+[OpenRouter](https://openrouter.ai). Por defecto usa `perplexity/sonar`, que
+busca en la web; se puede cambiar con `modelo_ia` en la configuración.
+
+Y está deliberadamente desconfiado, por un motivo concreto: *«¿qué base conviene
+para este juego?»* es una pregunta que **tiene forma de tener respuesta**. Un
+modelo casi nunca contesta "no sé" — produce algo que suena bien. Y acá el error
+es silencioso y caro: empaquetar, instalar y probar lleva veinte minutos, y si
+falla no sabés si fue la base o el juego.
+
+Por eso:
+
+- **Sin una fuente citada, la respuesta se descarta.** Aunque suene convincente
+  — sobre todo si suena convincente.
+- **«No encontré nada» es un resultado válido**, no un fallo.
+- **Lo que diga entra como `sin probar`**, nunca como `funciona`. Pasa a
+  `funciona` cuando alguien lo prueba de verdad y lo anota.
+
+La IA sirve al principio, cuando el archivo está vacío. A medida que se llena,
+va dejando de hacer falta.
+
 ### Configuración
 
 Para no repetir lo mismo cada vez, en `~/.config/nds2wiiu/config.ini`:
@@ -138,6 +169,8 @@ Para no repetir lo mismo cada vez, en `~/.config/nds2wiiu/config.ini`:
 consola = 192.168.40.150
 otp = ~/claves/otp.bin
 nuspacker = ~/herramientas/NUSPacker.jar
+openrouter = sk-or-...        ; opcional, solo para --consultar-ia
+modelo_ia = perplexity/sonar  ; opcional
 ```
 
 ## De dónde sale el arte
